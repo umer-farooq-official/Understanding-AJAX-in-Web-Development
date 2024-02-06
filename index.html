@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AJAX Understanding</title>
+</head>
+
+<body>
+    <h1>Understanding AJAX</h1>
+    <label>
+        <h3>Fetch Data from Public API</h3>
+    </label>
+    <input type="text" id="text" placeholder="Enter http:// link here">
+    <br>
+    <br>
+    <button id="btn">Fetch Data</button>
+    <div id="data"></div>
+    <br>
+    <img id="url" src="" alt="image" width="400px" height="200px"/>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script>
+        document.getElementById('btn').addEventListener('click', function () {
+            var data = { q: document.getElementById("text").value };
+
+            $.ajax({
+                url: 'https://api.linkpreview.net',
+                type: 'POST',
+                headers: {
+                    'X-Linkpreview-Api-Key': '1e97e14b1e5929cf232d12a1e5645ab7',
+                },
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+                success: function (response) {
+                    console.log(response);
+
+                    // Display link preview information
+                    $('#data').html(`
+                        <h2>${response.title}</h2>
+                        <p>${response.description}</p>
+                        <p>URL: <a href="${response.url}" target="_blank">${response.url}</a></p>
+                    `);
+
+                    // Display image
+                    $('#url').attr('src', response.image);
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR.status);
+                    console.log(errorThrown);
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
